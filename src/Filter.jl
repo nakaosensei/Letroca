@@ -17,6 +17,44 @@ module FilterModule
 		return replace(texto,"]","")
 	end	
 
+	function removerSetas(texto::AbstractString)
+		texto = replace(texto,">","")
+		texto = replace(texto,"<","")
+		return texto
+	end
+
+	function removerBarras(texto::AbstractString)
+		texto = replace(texto,"/","")
+		texto = replace(texto,"\\","")
+		return texto
+	end	
+
+	function removerGrupoCaracteresEspeciais(texto::AbstractString)
+		texto = replace(texto,"!","")
+		texto = replace(texto,"@","")
+		texto = replace(texto,"#","")
+		texto = replace(texto,"\$","")
+		texto = replace(texto,"%","")
+		texto = replace(texto,"¨","")
+		texto = replace(texto,"&","")
+		texto = replace(texto,"*","")
+		texto = replace(texto,"_","")
+		texto = replace(texto,"+","")
+		texto = replace(texto,"-","")
+		texto = replace(texto,"|","")
+		texto = replace(texto,"'","")
+		texto = replace(texto,";","")
+		texto = replace(texto,":","")
+		texto = replace(texto,"?","")
+		texto = replace(texto,"{","")
+		texto = replace(texto,"}","")
+		texto = replace(texto,"^","")
+		texto = replace(texto,"~","")
+		texto = replace(texto,"´","")
+		texto = replace(texto,"`","")		
+		return texto
+	end
+
 	function removerNumeros(texto::AbstractString)
 		texto = replace(texto,"0","")		
 		texto = replace(texto,"1","")
@@ -48,6 +86,9 @@ module FilterModule
 		texto = removerParenteses(texto)
 		texto = removerColchetes(texto)
 		texto = removerNumeros(texto)
+		texto = removerSetas(texto)
+		texto = removerBarras(texto)
+		texto = removerGrupoCaracteresEspeciais(texto)		
 		texto=toUpperCase(texto)
 		texto = replace(texto,"\n","")			
 		return texto

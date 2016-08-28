@@ -7,4 +7,4 @@ module PalavraControllerModule
 		mapLetras::Dict{AbstractString, Palavra}
 	end
 end
-println("sucess")
+

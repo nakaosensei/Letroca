@@ -3,8 +3,13 @@ module PalavraModule
 	
 	type Palavra
 		conteudo::AbstractString
-		tamanho::Int
+		tamanho::Int64
 		caracteres::AbstractString
 	end
+	
+	function getCharacters(AbstractString)
+						
+	end
+
 end
 
