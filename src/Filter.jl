@@ -69,27 +69,57 @@ module FilterModule
 	end
 
 	toUpperCase(texto::AbstractString) = uppercase(texto)
+
+
+	function replaceAcentuacoes(texto::AbstractString)
+		texto = replace(texto,"Ã","A")
+		texto = replace(texto,"Á","A")
+		texto = replace(texto,"À","A")
+		texto = replace(texto,"Â","A")
+		texto = replace(texto,"Ẽ","E")
+		texto = replace(texto,"É","E")
+		texto = replace(texto,"È","E")
+		texto = replace(texto,"Ê","E")
+		texto = replace(texto,"Ĩ","I")
+		texto = replace(texto,"Í","I")
+		texto = replace(texto,"Ì","I")
+		texto = replace(texto,"Î","I")
+		texto = replace(texto,"Õ","O")
+		texto = replace(texto,"Ó","O")
+		texto = replace(texto,"Ò","O")
+		texto = replace(texto,"Ô","O")
+		texto = replace(texto,"Ũ","U")
+		texto = replace(texto,"Ú","U")
+		texto = replace(texto,"Ù","U")
+		texto = replace(texto,"Û","U")
+		texto = replace(texto,"Ŵ","W")
+		texto = replace(texto,"Ẃ","W")
+		texto = replace(texto,"Ẁ","W")		
+		texto = replace(texto,"Ŕ","R")		
+				
+	end
 		
-	function removeEmptyObjects(v::Array{SubString{UTF8String},1})
+	function removeEmptyObjects{str<:AbstractString}(v1::Array{str,1})
 		palavras=AbstractString[]		
-		for s in v
+		for s in v1
 			if(length(s)>0)
 				push!(palavras,s)
 			end
 		end
 		return palavras
-	end
+	end	
 	
 	function filtrar(texto::AbstractString)
-		texto=removerPontos(texto)
-		texto=removerVirgulas(texto)
+		texto = removerPontos(texto)
+		texto = removerVirgulas(texto)
 		texto = removerParenteses(texto)
 		texto = removerColchetes(texto)
 		texto = removerNumeros(texto)
 		texto = removerSetas(texto)
 		texto = removerBarras(texto)
 		texto = removerGrupoCaracteresEspeciais(texto)		
-		texto=toUpperCase(texto)
+		texto=  toUpperCase(texto)
+		texto = replaceAcentuacoes(texto)
 		texto = replace(texto,"\n","")			
 		return texto
 	end	
