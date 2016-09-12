@@ -1,4 +1,22 @@
 module FilterModule
+
+
+	function removeTrashText(texto::AbstractString)
+		vet=split(texto,"<p>")
+		out=""
+		for s in vet
+			if(contains(s,"</p>")==true)
+				tmp=split(s,"</p>")
+				out=out*tmp[1]*"\n"		
+			end
+		end
+		out=replace(out,"<\b>","")
+		out=replace(out,"<b>","")
+		
+		return out
+	end
+
+
 	function removerPontos(texto::AbstractString)
 		return replace(texto, ".", "")
 	end
