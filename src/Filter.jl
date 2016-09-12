@@ -1,19 +1,61 @@
 module FilterModule
 
 
-	function removeTrashText(texto::AbstractString)
+		function removeTrashText(texto::AbstractString)
+		#Remove tudo entre <p> </p>
 		vet=split(texto,"<p>")
 		out=""
 		for s in vet
 			if(contains(s,"</p>")==true)
 				tmp=split(s,"</p>")
-				out=out*tmp[1]*"\n"		
+				out=out*tmp[1]*"\n"
 			end
 		end
-		out=replace(out,"<\b>","")
+		out=replace(out,"</b>","")
 		out=replace(out,"<b>","")
-		
-		return out
+		out=replace(out,"</i>","")
+		out=replace(out,"<i>","")
+
+		#Remove tudo entre <a </a>
+		vet2=split(out,"<a")
+		out2=""
+		for s2 in vet2
+			if(contains(s2,"</a")==true)
+				tmp2=split(s2,"</a>")
+				#println(tmp2[1])
+				#println(tmp2[2])
+				#println(tmp2[3])
+				out2=out2*tmp2[2]*"\n"
+			end
+		end
+
+		#Remove tudo entre <sup </sup>
+		vet3=split(out2,"<sup")
+		out3=""
+		for s3 in vet3
+			if(contains(s3,"</sup>")==true)
+				tmp3=split(s3,"</sup>")
+				#println(tmp3[1])
+				#println(tmp3[2])
+				#println(tmp3[3])
+				out3=out3*tmp3[2]*"\n"
+			end
+		end
+
+		#Remove tudo entre <span </span>
+		vet4=split(out3,"<span")
+		out4=""
+		for s4 in vet4
+			if(contains(s4,"</span>")==true)
+				tmp4=split(s4,"</span>")
+				#println(tmp4[1])
+				#println(tmp4[2])
+				#println(tmp4[3])
+				out4=out4*tmp4[2]*"\n"
+			end
+		end
+
+		return out4
 	end
 
 
