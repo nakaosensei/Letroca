@@ -10,7 +10,6 @@ module WebModule using Requests
 	function getDados(link::AbstractString)
 		res = get(link)
 		entrada=readall(res)
-		return entrada
+	        return entrada
 	end
-
 end

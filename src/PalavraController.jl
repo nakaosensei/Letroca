@@ -32,22 +32,31 @@ module PalavraControllerModule
 		return maior
 	end
 
-	#Esta funcao retorna a primeira palavra cujo tamanho seja
+	#Esta funcao uma palavra aleatoria cujo tamanho seja
 	#igual ao passado por parametro ou, caso uma palavra com este
 	#tamanho não exista, uma palavra maior que o tamanho da
 	#escolhida é retornado, mas caso não haja nenhuma palavra
 	#maior que a do tamanho passado, retorna-se a maior palavra
 	#do Array
 	function findWordWithThatSize(words::Array{Palavra,1},size::Int64)
+		possibleWords=Palavra[]
+		foundWord=false	
 		maior=words[1]
 		foundGreaterWord=false;
 		for p in words
 			if(length(p.conteudo)==size)
-				return p
+				push!(possibleWords,p)
+				foundWord=true
 			elseif(length(p.conteudo)>size && foundGreaterWord==false)
 				maior=p
 				foundGreaterWord=true
 			end
+		end
+		if(foundWord==true)
+			printWords(possibleWords)
+			println("\n")
+			idx = rand(1:length(possibleWords))
+			return possibleWords[idx]
 		end
 		if(foundGreaterWord==false)
 			return findGreaterWord(words)

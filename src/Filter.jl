@@ -1,85 +1,74 @@
 module FilterModule
 
 
-		function removeTrashText(texto::AbstractString)
-		#Remove tudo entre <p> </p>
-		vet=split(texto,"<p>")
+	function getWhatIsBetweenParagraphs(texto::AbstractString)#retorna todo o texto entre <p> e </p>
+		vet=split(texto,"<p")
 		out=""
 		for s in vet
-			if(contains(s,"</p>")==true)
-				tmp=split(s,"</p>")
+			if(contains(s,"</p")==true)
+				tmp=split(s,"</p")
 				out=out*tmp[1]*"\n"
 			end
 		end
+		return out
+	end
+
+
+
+	function removeBetweenStrings(s1::AbstractString,s2::AbstractString,texto::AbstractString)
+		vet=split(texto,s1)
+		out=""
+		for str in vet			
+			if(contains(str,s2)==false)
+				out=out*str
+			else
+				tmp=split(str,s2)
+				for i=2:length(tmp)
+					out=out*tmp[i]
+				end
+								
+			end
+		end
+		return out				
+	end
+
+
+	function removeTrashText(texto::AbstractString)
+		texto=removeBetweenStrings("<sup","</sup",texto)
+		texto=removeBetweenStrings("<span","</span",texto)
+		texto=removeBetweenStrings("<a","</a",texto)
+		texto=removeBetweenStrings("<script","</script",texto)
+		texto=removeBetweenStrings("class=\"","\">",texto)
+		out=getWhatIsBetweenParagraphs(texto)		
 		out=replace(out,"</b>","")
 		out=replace(out,"<b>","")
 		out=replace(out,"</i>","")
-		out=replace(out,"<i>","")
-
-		#Remove tudo entre <a </a>
-		vet2=split(out,"<a")
-		out2=""
-		for s2 in vet2
-			if(contains(s2,"</a")==true)
-				tmp2=split(s2,"</a>")
-				#println(tmp2[1])
-				#println(tmp2[2])
-				#println(tmp2[3])
-				out2=out2*tmp2[2]*"\n"
-			end
-		end
-
-		#Remove tudo entre <sup </sup>
-		vet3=split(out2,"<sup")
-		out3=""
-		for s3 in vet3
-			if(contains(s3,"</sup>")==true)
-				tmp3=split(s3,"</sup>")
-				#println(tmp3[1])
-				#println(tmp3[2])
-				#println(tmp3[3])
-				out3=out3*tmp3[2]*"\n"
-			end
-		end
-
-		#Remove tudo entre <span </span>
-		vet4=split(out3,"<span")
-		out4=""
-		for s4 in vet4
-			if(contains(s4,"</span>")==true)
-				tmp4=split(s4,"</span>")
-				#println(tmp4[1])
-				#println(tmp4[2])
-				#println(tmp4[3])
-				out4=out4*tmp4[2]*"\n"
-			end
-		end
-
-		return out4
+		out=replace(out,"<i>","")				
+		return out
 	end
 
 
 	function removerPontos(texto::AbstractString)
-		return replace(texto, ".", "")
+		return replace(texto, ".", " ")
 	end
 	
 	function removerVirgulas(texto::AbstractString)
-		return replace(texto, ",","")	
+		return replace(texto, ","," ")	
 	end
  
 	function removerParenteses(texto::AbstractString)
-		texto = replace(texto, "(","")
-		return replace(texto, ")","")
+		texto = replace(texto, "("," ")
+		return replace(texto, ")"," ")
 	end
 
 	function removerColchetes(texto::AbstractString)
-		texto = replace(texto, "[","")
-		return replace(texto,"]","")
+		texto = replace(texto, "["," ")
+		return replace(texto,"]"," ")
 	end	
 
 	function removerSetas(texto::AbstractString)
-		texto = replace(texto,">","")
-		texto = replace(texto,"<","")
+		texto = replace(texto,">"," ")
+		texto = replace(texto,"<"," ")
 		return texto
 	end
 
@@ -90,42 +79,46 @@ module FilterModule
 	end	
 
 	function removerGrupoCaracteresEspeciais(texto::AbstractString)
-		texto = replace(texto,"!","")
-		texto = replace(texto,"@","")
-		texto = replace(texto,"#","")
-		texto = replace(texto,"\$","")
-		texto = replace(texto,"%","")
-		texto = replace(texto,"¨","")
-		texto = replace(texto,"&","")
-		texto = replace(texto,"*","")
-		texto = replace(texto,"_","")
-		texto = replace(texto,"+","")
-		texto = replace(texto,"-","")
-		texto = replace(texto,"|","")
-		texto = replace(texto,"'","")
-		texto = replace(texto,";","")
-		texto = replace(texto,":","")
-		texto = replace(texto,"?","")
-		texto = replace(texto,"{","")
-		texto = replace(texto,"}","")
-		texto = replace(texto,"^","")
-		texto = replace(texto,"~","")
-		texto = replace(texto,"´","")
-		texto = replace(texto,"`","")		
+		texto = replace(texto,"!"," ")
+		texto = replace(texto,"@"," ")
+		texto = replace(texto,"#"," ")
+		texto = replace(texto,"\$"," ")
+		texto = replace(texto,"%"," ")
+		texto = replace(texto,"\""," ")
+		texto = replace(texto,"&"," ")
+		texto = replace(texto,"*"," ")
+		texto = replace(texto,"_"," ")
+		texto = replace(texto,"+"," ")
+		texto = replace(texto,"="," ")
+		texto = replace(texto,"-"," ")
+		texto = replace(texto,"|"," ")
+		texto = replace(texto,"'"," ")
+		texto = replace(texto,"¨"," ")
+		texto = replace(texto,";"," ")
+		texto = replace(texto,":"," ")
+		texto = replace(texto,"?"," ")
+		texto = replace(texto,"{"," ")
+		texto = replace(texto,"}"," ")
+		texto = replace(texto,"^"," ")
+		texto = replace(texto,"\t"," ")
+		texto = replace(texto,"¨"," ")
+		texto = replace(texto,"~"," ")
+		texto = replace(texto,"´"," ")
+		texto = replace(texto,"`"," ")		
 		return texto
 	end
 
 	function removerNumeros(texto::AbstractString)
-		texto = replace(texto,"0","")		
-		texto = replace(texto,"1","")
-		texto = replace(texto,"2","")
-		texto = replace(texto,"3","")
-		texto = replace(texto,"4","")
-		texto = replace(texto,"5","")
-		texto = replace(texto,"6","")
-		texto = replace(texto,"7","")
-		texto = replace(texto,"8","")
-		return replace(texto,"9","")		
+		texto = replace(texto,"0"," ")		
+		texto = replace(texto,"1"," ")
+		texto = replace(texto,"2"," ")
+		texto = replace(texto,"3"," ")
+		texto = replace(texto,"4"," ")
+		texto = replace(texto,"5"," ")
+		texto = replace(texto,"6"," ")
+		texto = replace(texto,"7"," ")
+		texto = replace(texto,"8"," ")
+		return replace(texto,"9"," ")		
 	end
 
 	toUpperCase(texto::AbstractString) = uppercase(texto)

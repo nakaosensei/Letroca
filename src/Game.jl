@@ -1,7 +1,7 @@
-module GameModule using PalavraControllerModule,FileModule,PalavraModule,FilterModule 
+module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebModule
 	export tamanhoPalavra,palavraChave
 	tamanhoPalavra=5
-	palavraChave="MACARRAO"
+	palavraChave="https://pt.wikipedia.org/wiki/Universidade_Washington_em_St._Louis"
 	chutes=10
 	palavras=Palavra[]
 	palavrasJogo=Palavra[]			
@@ -9,16 +9,18 @@ module GameModule using PalavraControllerModule,FileModule,PalavraModule,FilterM
 		println("\nBem vindo ao Letroca Nk Version, selecione uma opção:")
 		println("0-Defina a quantidade de chutes")		
 		println("1-Defina o tamanho da palavra")
-		println("2-Defina a palavra chave para busca do texto na wikipedia")
+		println("2-Defina o link de busca na wikipedia")
 		println("3-Jogar")
 		println("4-Ver configuracoes")
 		println("5-Sair")
 	end
 
 	function carregarPalavras()
-		global palavras
+		global palavras,palavraChave
 		palavraSA=AbstractString[]
-		fileArray = FileModule.fileStringArray
+		out=WebModule.getDados(palavraChave)
+		out=FilterModule.removeTrashText(out)
+		fileArray = split(out,"\n")
 		for s in fileArray
 			s = FilterModule.filtrar(s)
 			if(length(s)>1)
@@ -73,8 +75,9 @@ module GameModule using PalavraControllerModule,FileModule,PalavraModule,FilterM
 				println("Entrada invalida, somente numeros sao permitidos. =(")	
 			end									
 		elseif(x[1]=='2')
-			println("Digite a palavra chave para busca")
-			palavraChave=uppercase(readline(STDIN))
+			println("Digite o link da wikipedia")
+			palavraChave=readline(STDIN)
+			palavraChave=replace(palavraChave,"\n","")
 			println("A palavra chave foi setada para ",palavraChave)
 		elseif(x[1]=='3')
 			carregarPalavras()			
@@ -106,6 +109,11 @@ module GameModule using PalavraControllerModule,FileModule,PalavraModule,FilterM
 					end
 				end				
 				tmpChutes-=1								
+			end
+			if(tmpChutes<=0)
+				println("Game over... ")
+				PalavraControllerModule.printWords(palavrasJogo)
+				println(maior.conteudo)	
 			end
 			palavras=Palavra[]
 			palavrasJogo=Palavra[]			
