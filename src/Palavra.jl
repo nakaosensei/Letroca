@@ -2,13 +2,14 @@ module PalavraModule
 	export Palavra
 	
 	type Palavra
-		conteudo::AbstractString
-		tamanho::Int
-		caracteres::AbstractString
-		hiddenFace::AbstractString
+		conteudo::AbstractString #Conteudo da palavra
+		tamanho::Int #Tamanho da palavra
+		caracteres::AbstractString #Caracteres que a palavra contem
+		hiddenFace::AbstractString #É uma string com o mesmo tamanho de conteudo, mas preenchida com -, ex:counteudo AAA, hiddenFace ---
 		caracteresR::AbstractString #Caracteres com repeticoes
 	end
 	
+	#Retorna os caracteres ordenados, mas sem permitir repetições
 	function getOrdenedCharacters(palavra::AbstractString)
 		out=Char[]
 		for(c in palavra)
@@ -18,7 +19,8 @@ module PalavraModule
 		end			
 		return AbstractString(sort!(out))	
 	end
-
+	
+	#Retorna os caracteres ordenados, mas com repetições
 	function getOrdenedCharactersR(palavra::AbstractString)
 		out=Char[]
 		for(c in palavra)
@@ -27,8 +29,8 @@ module PalavraModule
 		return AbstractString(sort!(out))	
 	end
 
-	function isAnagram(palavra1::Palavra,palavra2::Palavra)
-		#p2 contem somente caracteres de p1
+	#p2 contem somente caracteres de p1
+	function isAnagram(palavra1::Palavra,palavra2::Palavra)		
 		for(c in palavra2.conteudo)
 			if(in(c,palavra1.caracteres)==false)
 				return false
@@ -37,6 +39,7 @@ module PalavraModule
 		return true
 	end
 
+	#Gera uma hidden face, in:MACACO out:------
 	function generateHiddenFace(s::AbstractString)
 		s1=""			
 		for c in s
@@ -44,9 +47,9 @@ module PalavraModule
 		end
 		return s1
 	end
+
+	#p2 contem somente caracteres de p1
 	function isAnagramStr(palavra1::ASCIIString,palavra2::Palavra)
-		#p2 contem somente caracteres de p1
-		#println(palavra1*" - "*palavra2.conteudo)
 		for(c in palavra2.conteudo)
 			if(in(c,palavra1)==false)
 				return false

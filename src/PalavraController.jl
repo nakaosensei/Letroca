@@ -8,20 +8,21 @@ module PalavraControllerModule
 		
 	end
 
-
-
+	#Printa o hidden face das palavras
 	function printHiddenFaces(words::Array{Palavra})
 		for p in words
 			println(p.hiddenFace)
 		end
 	end
 
+	#Printa o conteudo das palavras
 	function printWords(words::Array{Palavra})
 		for p in words
 			println(p.conteudo)
 		end
 	end
 
+	#Acha a palavra com o maior tamanho do array
 	function findGreaterWord(words::Array{Palavra})
 		maior=words[1]
 		for p in words			
@@ -32,7 +33,7 @@ module PalavraControllerModule
 		return maior
 	end
 
-	#Esta funcao uma palavra aleatoria cujo tamanho seja
+	#Esta funcao retorna uma palavra aleatoria cujo tamanho seja
 	#igual ao passado por parametro ou, caso uma palavra com este
 	#tamanho não exista, uma palavra maior que o tamanho da
 	#escolhida é retornado, mas caso não haja nenhuma palavra
@@ -53,8 +54,6 @@ module PalavraControllerModule
 			end
 		end
 		if(foundWord==true)
-			printWords(possibleWords)
-			println("\n")
 			idx = rand(1:length(possibleWords))
 			return possibleWords[idx]
 		end

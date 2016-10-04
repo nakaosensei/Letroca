@@ -1,10 +1,11 @@
 module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebModule
-	export tamanhoPalavra,palavraChave
 	tamanhoPalavra=5
-	palavraChave="https://pt.wikipedia.org/wiki/Universidade_Washington_em_St._Louis"
+	palavraChave="https://pt.wikipedia.org/wiki/Final_Fantasy"
 	chutes=10
 	palavras=Palavra[]
-	palavrasJogo=Palavra[]			
+	palavrasJogo=Palavra[]
+
+	#Mostra as opcoes do menu			
 	function showOptions()
 		println("\nBem vindo ao Letroca Nk Version, selecione uma opção:")
 		println("0-Defina a quantidade de chutes")		
@@ -15,6 +16,7 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 		println("5-Sair")
 	end
 
+	#Função que lê a string de entrada vinda do modulo Web(html), filtra e carrega na estrutura de palavras
 	function carregarPalavras()
 		global palavras,palavraChave
 		palavraSA=AbstractString[]
@@ -24,22 +26,25 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 		for s in fileArray
 			s = FilterModule.filtrar(s)
 			if(length(s)>1)
-				subArray=split(s," ")
-				subArray=FilterModule.removeEmptyObjects(subArray)
+				subArray=split(s," ")#Splita a string
+				subArray=FilterModule.removeEmptyObjects(subArray)#Retira vazios
 				for sub in subArray
-					if(in(sub,palavraSA)==false)
+					if(in(sub,palavraSA)==false)#Se a palavra ainda nao foi adicionada a string
 						push!(palavraSA,sub)
 					end	
 				end				
 			end
 		end
-		for s in palavraSA		
+		for s in palavraSA	#Percorre a string com as palavras e popula as estruturas de palavra
 			tmp=PalavraModule.getOrdenedCharactersR(s)	
 			instPalavra=Palavra(s,length(s),PalavraModule.getOrdenedCharacters(s),PalavraModule.generateHiddenFace(s),tmp)		
 			push!(palavras,instPalavra)					
 		end
 	end	
-	
+
+	#Dado a lista de palavras carregadas e a palavra selecionada como maior do jogo, filtra as palavras
+	#que serão usadas no jogo a partir da maior, as palavras aceitas serao somente as que tiverem os mesmos
+	#caracteres que a maior.	
 	function selecionarPalavrasDoJogo(maior::Palavra,palavras::Array{Palavra})
 		palavrasJogo=Palavra[]		
 		for p in palavras
@@ -50,13 +55,13 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 		return palavrasJogo
 	end
 	
-	function doActions(x::AbstractString)
+	function doActions(x::Int64)
 		global palavraChave
 		global tamanhoPalavra
 		global palavras
 		global chutes
 		global palavrasJogo
-		if(x[1]=='0')
+		if(x==0)#Setar quantidade de chutes
 			println("Digite a quantidade de chutes desejada:")
 			try
 				chutes=parse(Int64,readline(STDIN))
@@ -65,7 +70,7 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 			catch
 				println("Entrada invalida, somente numeros sao permitidos. =(")	
 			end
-		elseif(x[1]=='1')
+		elseif(x==1)#Setar tamanho da palavra
 			println("Digite o tamanho da palavra desejada:")
 			try
 				tamanhoPalavra=parse(Int64,readline(STDIN))
@@ -74,12 +79,12 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 			catch
 				println("Entrada invalida, somente numeros sao permitidos. =(")	
 			end									
-		elseif(x[1]=='2')
+		elseif(x==2)#Setar link da wikipedia
 			println("Digite o link da wikipedia")
 			palavraChave=readline(STDIN)
 			palavraChave=replace(palavraChave,"\n","")
 			println("A palavra chave foi setada para ",palavraChave)
-		elseif(x[1]=='3')
+		elseif(x==3)#Jogar
 			carregarPalavras()			
 			maior = PalavraControllerModule.findWordWithThatSize(palavras,tamanhoPalavra)
 			palavrasJogo=selecionarPalavrasDoJogo(maior,palavras)
@@ -94,7 +99,6 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 				recebido=uppercase(readline(STDIN))
 				recebido=replace(recebido,"\r","")
 				recebido=replace(recebido,"\n","")
-
 				if(maior.conteudo==recebido)
 					maior.hiddenFace=maior.conteudo
 					println("PARABENS! Acertou! A palavra era: "*maior.conteudo)
@@ -117,13 +121,12 @@ module GameModule using PalavraControllerModule,PalavraModule,FilterModule ,WebM
 			end
 			palavras=Palavra[]
 			palavrasJogo=Palavra[]			
-		elseif(x[1]=='4')
+		elseif(x==4)#Mostrar estado
 			println("Palavra chave(Busca Wikipedia): "*palavraChave)
 			println("Tamanho palavra: ",tamanhoPalavra)
 			println("Quantidade de chutes: ",chutes)			
-		elseif(x[1]=='5')
+		elseif(x==5)#Quit
 			quit()
-		end
-		showOptions()
+		end		
 	end		
 end

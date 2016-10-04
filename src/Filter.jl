@@ -1,6 +1,6 @@
 module FilterModule
 
-
+	#Retorna tudo que estiver entre todos o <p e </p de toda a string
 	function getWhatIsBetweenParagraphs(texto::AbstractString)#retorna todo o texto entre <p> e </p>
 		vet=split(texto,"<p")
 		out=""
@@ -14,7 +14,7 @@ module FilterModule
 	end
 
 
-
+	#Remove tudo que estiver entre essas duas strings
 	function removeBetweenStrings(s1::AbstractString,s2::AbstractString,texto::AbstractString)
 		vet=split(texto,s1)
 		out=""
@@ -32,7 +32,7 @@ module FilterModule
 		return out				
 	end
 
-
+	#Remove os lixos de tag HTML
 	function removeTrashText(texto::AbstractString)
 		texto=removeBetweenStrings("<sup","</sup",texto)
 		texto=removeBetweenStrings("<span","</span",texto)
